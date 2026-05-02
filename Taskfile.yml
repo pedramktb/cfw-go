@@ -1,0 +1,42 @@
+version: 3
+
+tasks:
+  default:
+    cmds:
+      - task --list
+    silent: true
+
+  check:
+    internal: true
+    preconditions:
+      - sh: command -v tinygo
+        msg: "tinygo not found. Install from https://tinygo.org/getting-started/install/"
+      - sh: command -v node
+        msg: "node not found. Install from https://nodejs.org/"
+
+  test:
+    desc: Run tests
+    cmds:
+      - go test ./...
+
+  build:
+    desc: Build wasm
+    deps: [check]
+    cmds:
+      - mkdir -p build
+      - go tool workers-assets-gen
+      - node scripts/patch-wasm-exec.mjs
+      - tinygo build -target wasm -no-debug -o ./build/app.wasm .
+
+  run:
+    desc: Run the application
+    deps: [build]
+    cmds:
+      - npx -y wrangler@4 dev
+
+  wrangler:
+    desc: >
+      Wrangler command. Use -- for passing arguments.
+      Example: go tool task wrangler -- dev
+    cmds:
+      - npx -y wrangler@4 {{.CLI_ARGS}}
