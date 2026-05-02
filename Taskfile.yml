@@ -26,6 +26,7 @@ tasks:
       - mkdir -p build
       - go tool workers-assets-gen
       - node scripts/patch-wasm-exec.mjs
+      - node scripts/patch-roundtrip.mjs
       - tinygo build -target wasm -no-debug -o ./build/app.wasm .
 
   run:

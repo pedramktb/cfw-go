@@ -1,3 +1,8 @@
 name = "cfw-go"
 main = "./build/worker.mjs"
 compatibility_date = "2025-01-01"
+account_id = "cdb8df56934e38190301d33bf7fba254"
+
+routes = [
+  { pattern = "cfw-go.pedramktb.com", custom_domain = true }
+]
